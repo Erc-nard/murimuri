@@ -12,7 +12,7 @@
 |팀원|github|
 |------|---|
 |김창균|https://github.com/|
-|박승완|https://github.com/|
+|박승완|https://github.com/wanipark1004|
 |유은선|https://github.com/Erc-nard|
 
 
