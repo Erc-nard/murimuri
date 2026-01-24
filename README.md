@@ -1,4 +1,4 @@
-# 달려달려 햄찌런
+# 내가 친구가 될 수 있을 리 없잖아 무리무리! (*무리가 아니었다?!)
 
 
 <img width="1186" height="820" alt="Image" src="https://github.com/user-attachments/assets/b10e34fc-9f62-4092-acae-23a4cb5a346a" />
@@ -9,10 +9,12 @@
 
 ---
 
-|팀원|github|역할|
-|------|---|---|
-|유은선|https://github.com/Erc-nard|기획, 그래픽, 클라이언트|
-|이종민|https://github.com/jongjm1023|서버, 클라이언트|
+|팀원|github|
+|------|---|
+|김창균|https://github.com/|
+|박승완|https://github.com/|
+|유은선|https://github.com/Erc-nard|
+
 
 
 
