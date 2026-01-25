@@ -40,7 +40,7 @@
           {
             "name": "AudioBehaviour",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -54,7 +54,7 @@
           {
             "name": "AudioListener",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -97,7 +97,7 @@
           {
             "name": "Camera",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -117,7 +117,7 @@
           {
             "name": "Cubemap",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -137,7 +137,7 @@
           {
             "name": "EditorExtension",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 1,
             "icon": null
@@ -151,7 +151,7 @@
           {
             "name": "GameObject",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -183,7 +183,7 @@
           {
             "name": "LevelGameManager",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 1,
             "icon": null
@@ -215,7 +215,7 @@
           {
             "name": "LightmapSettings",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -229,7 +229,7 @@
           {
             "name": "Material",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -255,7 +255,7 @@
           {
             "name": "MonoBehaviour",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -269,7 +269,7 @@
           {
             "name": "MonoScript",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 1,
             "icon": null
@@ -277,7 +277,7 @@
           {
             "name": "NamedObject",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 1,
             "icon": null
@@ -315,7 +315,7 @@
           {
             "name": "RectTransform",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -329,7 +329,7 @@
           {
             "name": "RenderSettings",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -361,7 +361,7 @@
           {
             "name": "Shader",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -387,7 +387,7 @@
           {
             "name": "Sprite",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -1354,7 +1354,7 @@
           {
             "name": "Font",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -1426,7 +1426,7 @@
           {
             "name": "Canvas",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -1440,7 +1440,7 @@
           {
             "name": "CanvasRenderer",
             "scenes": [
-              "Assets/Scenes/MiniGame_EyeContact.unity"
+              "Assets/Scenes/MiniGame_Rhythm.unity"
             ],
             "dependencyType": 0,
             "icon": null
