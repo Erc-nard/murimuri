@@ -15,7 +15,6 @@ public class DialogueLine
     public string nextScene;
     public bool isMonologue;
 
-    // 선택지 데이터
     public string opt1Text;
     public int opt1TargetID;
     public string opt2Text;
@@ -24,6 +23,9 @@ public class DialogueLine
 
 public class VisualNovelVideoManager : MonoBehaviour
 {
+    [Header("--- 파일 설정 ---")]
+    public string csvFileName = "Chapter1";
+
     [Header("--- UI 연결 ---")]
     public VideoPlayer characterVideoPlayer;
     public RawImage characterDisplay;
@@ -35,7 +37,7 @@ public class VisualNovelVideoManager : MonoBehaviour
     public GameObject nameInputPanel;
     public InputField nameInputField;
 
-    [Header("--- 선택지 UI (범용) ---")]
+    [Header("--- 선택지 UI ---")]
     public GameObject choicePanel;
     public Button choiceButton1;
     public Text choiceButton1Text;
@@ -48,30 +50,40 @@ public class VisualNovelVideoManager : MonoBehaviour
 
     private List<DialogueLine> scenarioData = new List<DialogueLine>();
     private int currentLineIndex = 0;
-    private string currentVideoName = "";
+    private string currentVideoName = ""; // 현재 재생 중인 비디오 이름 기억
     private string playerName = "주인공";
 
     void Start()
     {
-        // UI 초기화
+        // 안전 장치: UI 연결 확인
+        if (characterVideoPlayer == null || characterDisplay == null)
+        {
+            Debug.LogError("🚨 VideoPlayer나 RawImage가 연결되지 않았습니다!");
+            return;
+        }
+
+        // RawImage에 텍스처 자동 연결
+        if (characterDisplay.texture == null && characterVideoPlayer.targetTexture != null)
+        {
+            characterDisplay.texture = characterVideoPlayer.targetTexture;
+        }
+
+        // 초기화
         if (dialogueBoxImage != null) dialogueBoxImage.gameObject.SetActive(false);
         if (choicePanel != null) choicePanel.SetActive(false);
         if (nameInputPanel != null) nameInputPanel.SetActive(false);
 
+        // 처음엔 영상 화면 끄기
+        characterDisplay.gameObject.SetActive(false);
+
         playerName = PlayerPrefs.GetString("PlayerName", "주인공");
 
-        // 1. CSV 파일 로드
-        string filename = "Chapter1";
-        LoadDialogueFromCSV(filename);
+        LoadDialogueFromCSV(csvFileName);
 
-        // 2. ★ 미니게임 복귀 체크 (핵심 기능)
-        // 미니게임에서 이기거나 져서 돌아왔을 때, 지정된 ID로 점프합니다.
         int targetID = PlayerPrefs.GetInt("JumpTargetID", -1);
-
         if (targetID != -1)
         {
-            Debug.Log($"미니게임 복귀! ID {targetID}번으로 이동합니다.");
-            PlayerPrefs.DeleteKey("JumpTargetID"); // 사용 후 삭제 (필수)
+            PlayerPrefs.DeleteKey("JumpTargetID");
             JumpToID(targetID);
         }
         else
@@ -82,7 +94,6 @@ public class VisualNovelVideoManager : MonoBehaviour
 
     void Update()
     {
-        // 입력창이나 선택지창이 떠있으면 대사 넘기기 금지
         if ((choicePanel != null && choicePanel.activeSelf) ||
             (nameInputPanel != null && nameInputPanel.activeSelf)) return;
 
@@ -95,13 +106,12 @@ public class VisualNovelVideoManager : MonoBehaviour
         }
     }
 
-    // ★ CSV 파싱 로직
     void LoadDialogueFromCSV(string filename)
     {
         scenarioData.Clear();
         TextAsset data = Resources.Load<TextAsset>(filename);
 
-        if (data == null) { Debug.LogError($"파일 없음: {filename}"); return; }
+        if (data == null) { Debug.LogError($"Resources 폴더에 파일 없음: {filename}"); return; }
 
         string[] lines = data.text.Split('\n');
         for (int i = 1; i < lines.Length; i++)
@@ -110,26 +120,18 @@ public class VisualNovelVideoManager : MonoBehaviour
             if (string.IsNullOrWhiteSpace(line)) continue;
 
             string[] row = line.Split(',');
-
             DialogueLine dl = new DialogueLine();
+
+            // 파싱 로직
             int.TryParse(row[0].Trim(), out dl.id);
             dl.speakerName = row[1].Trim();
             dl.dialogueText = row[2].Replace("<comma>", ",").Trim();
-            dl.videoName = (row.Length > 3) ? row[3].Trim() : "";
+            dl.videoName = (row.Length > 3) ? row[3].Trim() : ""; // 비디오 이름
             dl.nextScene = (row.Length > 4) ? row[4].Trim() : "";
             if (row.Length > 5 && row[5].Trim().ToUpper() == "TRUE") dl.isMonologue = true;
 
-            // 선택지 데이터 읽기
-            if (row.Length > 7)
-            {
-                dl.opt1Text = row[6].Trim();
-                int.TryParse(row[7].Trim(), out dl.opt1TargetID);
-            }
-            if (row.Length > 9)
-            {
-                dl.opt2Text = row[8].Trim();
-                int.TryParse(row[9].Trim(), out dl.opt2TargetID);
-            }
+            if (row.Length > 7) { dl.opt1Text = row[6].Trim(); int.TryParse(row[7].Trim(), out dl.opt1TargetID); }
+            if (row.Length > 9) { dl.opt2Text = row[8].Trim(); int.TryParse(row[9].Trim(), out dl.opt2TargetID); }
 
             scenarioData.Add(dl);
         }
@@ -141,125 +143,91 @@ public class VisualNovelVideoManager : MonoBehaviour
         DisplayCurrentLine();
     }
 
-    // ★ 다음 대사로 넘어가기 (클릭 시 호출)
     public void DisplayNextSentence()
     {
-        // 현재 인덱스가 범위 내에 있는지 확인
         if (currentLineIndex < scenarioData.Count)
         {
             DialogueLine currentLine = scenarioData[currentLineIndex];
-
-            // ★ 중요: 현재 줄의 NextScene에 "JUMP_"가 적혀있으면, 인덱스를 늘리지 말고 바로 점프!
             if (!string.IsNullOrEmpty(currentLine.nextScene) && currentLine.nextScene.StartsWith("JUMP_"))
             {
-                string idStr = currentLine.nextScene.Replace("JUMP_", "");
-                int targetID = int.Parse(idStr);
-
-                JumpToID(targetID); // 여기서 DisplayCurrentLine이 호출되므로 바로 리턴
+                int targetID = int.Parse(currentLine.nextScene.Replace("JUMP_", ""));
+                JumpToID(targetID);
                 return;
             }
         }
-
-        // 별다른 점프가 없다면 다음 줄로 진행
         currentLineIndex++;
         DisplayCurrentLine();
     }
 
-    // ★ 디버깅용 로그가 추가된 DisplayCurrentLine
     void DisplayCurrentLine()
     {
-        if (currentLineIndex >= scenarioData.Count) { return; }
+        if (currentLineIndex >= scenarioData.Count) return;
 
         DialogueLine line = scenarioData[currentLineIndex];
 
-        // --- 디버깅 로그 (콘솔창 확인용) ---
-        Debug.Log($"[현재 진행] ID: {line.id} / NextScene 값: '{line.nextScene}'");
-        // -------------------------------
-
-        // [1] 대사 표시
-        string finalName = line.speakerName.Replace("{PlayerName}", playerName).Replace("{playername}", playerName);
-        string finalDialogue = line.dialogueText.Replace("{PlayerName}", playerName).Replace("{playername}", playerName);
+        string finalName = line.speakerName.Replace("{PlayerName}", playerName);
+        string finalDialogue = line.dialogueText.Replace("{PlayerName}", playerName);
 
         nameText.text = finalName;
         dialogueText.text = finalDialogue;
-
         if (dialogueBoxImage != null) dialogueBoxImage.gameObject.SetActive(true);
 
         if (line.isMonologue) { dialogueBoxImage.color = monologueColor; nameText.gameObject.SetActive(false); }
         else { dialogueBoxImage.color = normalColor; nameText.gameObject.SetActive(true); }
 
-        if (!string.IsNullOrEmpty(line.videoName) && currentVideoName != line.videoName)
+        // ==========================================
+        // ★ 비디오 재생 핵심 로직 (수정됨) ★
+        // ==========================================
+
+        // 1. CSV 비디오 칸이 비어있지 않은 경우에만 비디오 변경 시도
+        if (!string.IsNullOrEmpty(line.videoName))
         {
-            if (line.videoName == "HIDE")
+            // 2. "현재 재생 중인 비디오"와 "새로운 비디오"가 다를 때만 교체
+            // (같으면 PlayVideo를 호출하지 않으므로 기존 영상이 계속 재생됨)
+            if (currentVideoName != line.videoName)
             {
-                characterDisplay.gameObject.SetActive(false);
-                characterVideoPlayer.Stop();
-                currentVideoName = "HIDE";
-            }
-            else
-            {
-                PlayVideo(line.videoName);
+                if (line.videoName == "HIDE")
+                {
+                    characterDisplay.gameObject.SetActive(false); // 화면 끄기
+                    characterVideoPlayer.Stop();
+                    currentVideoName = "HIDE";
+                }
+                else
+                {
+                    PlayVideo(line.videoName);
+                }
             }
         }
+        // 만약 line.videoName이 비어있다면("") 아무것도 안 함 -> 이전 영상 유지됨!
 
-        // [2] 특수 기능 체크
+        // ==========================================
+
         if (line.nextScene == "INPUT_NAME")
         {
             if (nameInputPanel != null) { nameInputPanel.SetActive(true); nameInputField.text = ""; }
             return;
         }
 
-        // ★★★ 여기가 문제의 구간 ★★★
         if (line.nextScene == "CHOICE")
         {
-            Debug.Log(">>> [성공] CHOICE 조건문 진입함!");
-
-            if (choicePanel == null)
+            if (choicePanel != null)
             {
-                Debug.LogError(">>> [비상!] Inspector에서 'Choice Panel' 연결이 비어있습니다(None)!");
-            }
-            else
-            {
-                Debug.Log($">>> [확인] ChoicePanel을 켭니다. 현재 상태: {choicePanel.activeSelf}");
                 choicePanel.SetActive(true);
-
-                // 버튼 텍스트 설정
                 if (choiceButton1Text != null) choiceButton1Text.text = line.opt1Text;
                 if (choiceButton2Text != null) choiceButton2Text.text = line.opt2Text;
 
-                // 버튼 이벤트 연결
-                if (choiceButton1 != null)
-                {
-                    choiceButton1.onClick.RemoveAllListeners();
-                    choiceButton1.onClick.AddListener(() =>
-                    {
-                        choicePanel.SetActive(false);
-                        JumpToID(line.opt1TargetID);
-                    });
-                }
-                if (choiceButton2 != null)
-                {
-                    choiceButton2.onClick.RemoveAllListeners();
-                    choiceButton2.onClick.AddListener(() =>
-                    {
-                        choicePanel.SetActive(false);
-                        JumpToID(line.opt2TargetID);
-                    });
-                }
-                Debug.Log(">>> [완료] 버튼 설정 끝. 패널이 켜져야 정상.");
+                if (choiceButton1 != null) { choiceButton1.onClick.RemoveAllListeners(); choiceButton1.onClick.AddListener(() => { choicePanel.SetActive(false); JumpToID(line.opt1TargetID); }); }
+                if (choiceButton2 != null) { choiceButton2.onClick.RemoveAllListeners(); choiceButton2.onClick.AddListener(() => { choicePanel.SetActive(false); JumpToID(line.opt2TargetID); }); }
             }
             return;
         }
-        // ★★★★★★★★★★★★★★★★★★★
 
         if (!string.IsNullOrEmpty(line.nextScene) && !line.nextScene.StartsWith("JUMP_"))
         {
             SceneManager.LoadScene(line.nextScene);
-            return;
         }
     }
-    
-    // ★ ID 검색해서 점프하는 함수
+
     void JumpToID(int targetID)
     {
         for (int i = 0; i < scenarioData.Count; i++)
@@ -271,7 +239,6 @@ public class VisualNovelVideoManager : MonoBehaviour
                 return;
             }
         }
-        Debug.LogError($"CSV에서 ID {targetID}를 찾을 수 없습니다!");
     }
 
     public void OnNameSubmitted()
@@ -286,20 +253,26 @@ public class VisualNovelVideoManager : MonoBehaviour
         DisplayNextSentence();
     }
 
+    // ★ 비디오 파일 로드 함수 ★
     void PlayVideo(string videoName)
     {
-        VideoClip clip = Resources.Load<VideoClip>("Videos/" + videoName);
+        // 1. Assets/Resources/Videos/ 폴더 안의 파일을 찾음
+        string path = "Videos/" + videoName;
+
+        // 2. 파일 로드
+        VideoClip clip = Resources.Load<VideoClip>(path);
+
         if (clip != null)
         {
             characterVideoPlayer.clip = clip;
-            characterVideoPlayer.isLooping = true;
+            characterVideoPlayer.isLooping = true; // ★ 무한 반복 설정
             characterVideoPlayer.Play();
             characterDisplay.gameObject.SetActive(true);
-            currentVideoName = videoName;
+            currentVideoName = videoName; // 현재 비디오 이름 갱신
         }
         else
         {
-            Debug.LogWarning($"비디오를 찾을 수 없음: Videos/{videoName}");
+            Debug.LogError($"🚨 영상을 찾을 수 없습니다! 경로 확인: Assets/Resources/Videos/{videoName}");
         }
     }
 }

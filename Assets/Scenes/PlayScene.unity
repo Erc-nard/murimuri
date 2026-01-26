@@ -447,7 +447,7 @@ VideoPlayer:
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: <noninit>
   m_RenderMode: 2
-  m_AspectRatio: 2
+  m_AspectRatio: 5
   m_DataSource: 0
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
@@ -3269,9 +3269,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 931916820}
   - {fileID: 1853879385}
   - {fileID: 1908368894}
-  - {fileID: 931916820}
   - {fileID: 1842822500}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3309,6 +3309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96fdb6a8074286840be8e47525cf4968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualNovelVideoManager
+  csvFileName: Chapter1
   characterVideoPlayer: {fileID: 116114912}
   characterDisplay: {fileID: 931916822}
   nameText: {fileID: 529422117}
@@ -3321,8 +3322,8 @@ MonoBehaviour:
   choiceButton1Text: {fileID: 260195837}
   choiceButton2: {fileID: 2106467324}
   choiceButton2Text: {fileID: 1899228947}
-  normalColor: {r: 0, g: 0, b: 0, a: 0.8}
-  monologueColor: {r: 0.5660378, g: 0.31238878, b: 0.3796835, a: 0.9}
+  normalColor: {r: 0, g: 0, b: 0, a: 1}
+  monologueColor: {r: 0.5660378, g: 0.31238878, b: 0.3796835, a: 1}
 --- !u!4 &1179606365
 Transform:
   m_ObjectHideFlags: 0
