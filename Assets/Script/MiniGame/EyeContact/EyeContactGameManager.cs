@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // 씬 이동 필수
 
 public class EyeContactGameManager : MonoBehaviour
 {
     [Header("Objects")]
-    public RectTransform targetUI;  // 도망 다니는 타겟 (TargetMover가 붙은 애)
-    public RectTransform eyeCursor; // 🔥 내 눈 (EyeTrackingReceiver가 붙은 빨간 점)
+    public RectTransform targetUI;  // 도망 다니는 타겟
+    public RectTransform eyeCursor; // 내 눈 (시선)
 
     [Header("Game Settings")]
-    public float hitRadius = 100f; // 판정 범위 (이 거리 안에 들어오면 맞은 것으로 침)
+    public float hitRadius = 100f; // 판정 범위
     
     [Header("UI")]
     public Slider loveGauge;      // 호감도 게이지
@@ -17,11 +18,12 @@ public class EyeContactGameManager : MonoBehaviour
 
     // 내부 변수
     private bool isHit = false;
+    private bool isGameEnded = false; 
 
     void Update()
     {
-        // 안전 장치
-        if (targetUI == null || eyeCursor == null) return;
+        // 게임 종료되었거나 오브젝트 없으면 실행 안 함
+        if (isGameEnded || targetUI == null || eyeCursor == null) return;
 
         CheckHit();
         UpdateGameLogic();
@@ -29,11 +31,10 @@ public class EyeContactGameManager : MonoBehaviour
 
     void CheckHit()
     {
-        // 1. 타겟과 내 눈(커서) 사이의 거리 계산
-        // UI(Overlay) 환경에서는 transform.position이 화면 상의 픽셀 좌표와 비슷하게 동작합니다.
+        // 타겟과 내 눈 사이 거리 계산
         float distance = Vector2.Distance(targetUI.position, eyeCursor.position);
 
-        // 2. 거리가 반지름보다 작으면 '명중'
+        // 거리가 반지름보다 작으면 명중
         isHit = (distance < hitRadius);
     }
 
@@ -43,35 +44,41 @@ public class EyeContactGameManager : MonoBehaviour
         {
             // 👀 시선 고정 성공: 게이지 상승
             loveGauge.value += fillSpeed * Time.deltaTime;
-            
-            // (선택사항) 여기에 "하트 파티클" 재생 함수를 넣으면 좋습니다.
-            // PlayHeartEffect();
         }
         else
         {
-            // 딴청 피우는 중: 게이지 하락
+            // 딴청: 게이지 하락
             loveGauge.value -= drainSpeed * Time.deltaTime;
         }
 
-        // 승리/패배 조건 체크
+        // 승리 조건: 게이지 가득 참
         if (loveGauge.value >= 1.0f)
         {
             GameOver(true);
-        }
-        else if (loveGauge.value <= 0.0f)
-        {
-            // 게이지가 0이 되면 게임오버 시킬지, 그냥 0에서 멈출지 결정
-            // GameOver(false); 
         }
     }
 
     void GameOver(bool isSuccess)
     {
-        Debug.Log(isSuccess ? "💖 심쿵 성공! (게임 클리어)" : "💔 실패...");
-        this.enabled = false; // 게임 로직 정지
+        if (isGameEnded) return; 
+        isGameEnded = true;     
+
+        if (isSuccess)
+        {
+            Debug.Log("💖 심쿵 성공! 메인 스토리로 복귀합니다.");
+
+            // ★ 번호 지정 없이 메인 씬만 로드하면 됩니다.
+            // (메인 매니저가 알아서 다음 줄을 재생합니다)
+            SceneManager.LoadScene("PlayScene");
+        }
+        else
+        {
+            // 실패 시 로직 (필요하면 구현)
+            Debug.Log("💔 실패...");
+        }
     }
 
-    // 🛠️ 개발자 편의 기능: 판정 범위를 눈으로 보여줍니다.
+    // 개발자 편의 기능: 판정 범위 그리기
     void OnDrawGizmos()
     {
         if (targetUI != null)
