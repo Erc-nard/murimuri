@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MiniGame_ChamChamCham.unity
     guid: bfca226a8d8624745b6dc75eb800d444
+  - enabled: 1
+    path: Assets/Scenes/TitleScene.unity
+    guid: e18b0488c0fe1a14c8c2f4dd6dcd7ffb
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: a19041a4d25e1df4e93ebc75fc4d589e, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
