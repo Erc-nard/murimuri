@@ -8,12 +8,18 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MiniGame_Rhythm.unity
     guid: ad5ee3a8cba906345859def9bbcf4af2
   - enabled: 0
     path: Assets/Scenes/MiniGame_EyeContact.unity
     guid: 2f81a88a8a9e5b846b096bdc1c3226f7
+  - enabled: 1
+    path: Assets/Scenes/MiniGame_ChamChamCham.unity
+    guid: bfca226a8d8624745b6dc75eb800d444
   m_configObjects:
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: a19041a4d25e1df4e93ebc75fc4d589e, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: f6a86f97f0421af4ea128e268338b9ae, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 47cdae9af70cc2d4e8f2301b8091a20b, type: 2}
   m_UseUCBPForAssetBundles: 0
