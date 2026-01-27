@@ -102,5 +102,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd57f995150010742b8bb21641009fda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIGradient
-  topColor: {r: 0, g: 0.33333334, b: 0.33333334, a: 0.78431374}
-  bottomColor: {r: 0.254902, g: 0.4117647, b: 0.882353, a: 1}
+  topColor: {r: 0.9145504, g: 0.9150943, b: 0.8935119, a: 0.08627451}
+  bottomColor: {r: 1, g: 0.3726415, b: 0.6915095, a: 1}
