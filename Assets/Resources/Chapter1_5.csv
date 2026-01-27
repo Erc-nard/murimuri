@@ -203,7 +203,7 @@ ID,Speaker,Dialogue,Video,NextScene,IsMonologue,Opt1_Text,Opt1_Target,Opt2_Text,
 202,{PlayerName},카나~ 잘 지냈어? 오랜만이야.,Kana_Noise,,,,,,,main,0,
 203,{PlayerName},어? 너 괜찮아...?,,,,,,,,main,0,
 204,카나,{PlayerName}... 나 몸이... 이상...,,,,,,,,main,0,
-205,,승완이 게임 시작,,,TRUE,,,,,main,0,0
+205,,,Kana_Noise,KanaRebuildScene,,,,,,main,0,
 206,{PlayerName},카나<comma> 카나! 괜찮아?!,,,,,,,,main,0,
 207,카나,윽...으윽...,,,,,,,,main,0,
 208,카나,{PlayerName}...?,,,,,,,,main,0,

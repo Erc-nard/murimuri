@@ -36,7 +36,7 @@ public class DialogueLine
 public class VisualNovelVideoManager : MonoBehaviour
 {
     [Header("--- 파일 설정 ---")]
-    public string csvFileName = "Chapter1_new";
+    public string csvFileName = "Chapter1_5";
 
     [Header("--- UI 연결 ---")]
     public VideoPlayer characterVideoPlayer;
@@ -144,9 +144,11 @@ public class VisualNovelVideoManager : MonoBehaviour
     {
         if (isWaitingForFace)
         {
-            if (headDetector != null && headDetector.currentDistance <= 0.3f)
+            // Enter 키를 누르면 넘어가기
+            if (Keyboard.current != null && Keyboard.current.enterKey.wasPressedThisFrame)
             {
                 isWaitingForFace = false;
+                if (guideTextObject != null) guideTextObject.SetActive(false);
                 DisplayNextSentence();
             }
             return;

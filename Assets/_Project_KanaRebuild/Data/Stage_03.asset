@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65b23487324447a0b95ebdc6982f275, type: 3}
+  m_Name: Stage_03
+  m_EditorClassIdentifier: Assembly-CSharp::KanaRebuild.StageData
+  stageIndex: 2
+  targetSyncRate: 75
+  backgroundLogs:
+  - '> Deep scan initiated...'
+  - '> Checking memory boundaries...'
+  - '> Runtime exception log found'
+  - '> IndexOutOfRangeException'
+  - '> at DataProcessor.CopyBuffer()'
+  - '> Array size: 10 (indices 0-9)'
+  - '> Loop condition missing'
+  - '> Infinite loop or overflow risk'
+  problemCode: "[ERROR CODE]\n// DataProcessor.cs - Loop condition\nint[] buffer
+    = new int[10];\nfor (int i = 0; _____ ; i++) {\n    buffer[i] = data[i];\n}\n//
+    IndexOutOfRangeException"
+  choices:
+  - '[A] i < 10'
+  - '[B] i <= 10'
+  - '[C] i < buffer'
+  - '[D] i == 10'
+  correctChoiceIndex: 0
+  successMessage: '> BOUNDS FIXED. Use i < length. +25% sync.'
+  failMessage: '> VIOLATION. i < 10 for array[10].'

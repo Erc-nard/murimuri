@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65b23487324447a0b95ebdc6982f275, type: 3}
+  m_Name: Stage_04
+  m_EditorClassIdentifier: Assembly-CSharp::KanaRebuild.StageData
+  stageIndex: 3
+  targetSyncRate: 100
+  backgroundLogs:
+  - '> FINAL RESTORATION PHASE'
+  - '> Analyzing Enemy.cs runtime...'
+  - '> Runtime crash log detected'
+  - '> NullReferenceException thrown'
+  - '> at Enemy.Update() line 42'
+  - '> Accessing null object reference'
+  - '> Missing null check before access'
+  - '> Add safety condition required'
+  problemCode: "[ERROR CODE]\n// Enemy.cs - Null check missing\nvoid Update() {\n   
+    if (_____) {\n        Chase(target.position);\n    }\n}"
+  choices:
+  - '[A] target == null'
+  - '[B] target != null'
+  - '[C] target.position != null'
+  - '[D] target.gameObject.activeSelf'
+  correctChoiceIndex: 1
+  successMessage: '> PATCH APPLIED. Syntax resolved. +25% sync.'
+  failMessage: '> PATCH FAILED. C# requires '';'' at end.'
