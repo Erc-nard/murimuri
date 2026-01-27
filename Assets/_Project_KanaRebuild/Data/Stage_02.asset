@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65b23487324447a0b95ebdc6982f275, type: 3}
+  m_Name: Stage_02
+  m_EditorClassIdentifier: Assembly-CSharp::KanaRebuild.StageData
+  stageIndex: 1
+  targetSyncRate: 50
+  backgroundLogs:
+  - '> Restoring logic circuits...'
+  - '> Analyzing GameManager.cs'
+  - '> Checking conditional statements...'
+  - '> WARNING: Assignment in condition'
+  - '> Found: player.health _____ 0'
+  - '> Using wrong operator type'
+  - '> GameOver() execution error'
+  - '> Critical logic bug detected'
+  problemCode: "[ERROR CODE]\n// GameManager.cs - Wrong operator\nvoid CheckGameOver()
+    {\n    if (player.health _____ 0) {\n        GameOver();\n    }\n}"
+  choices:
+  - '[A] Use <= (less or equal)'
+  - '[B] Use = (assignment)'
+  - '[C] Use == (equal comparison)'
+  - '[D] Use != (not equal)'
+  correctChoiceIndex: 2
+  successMessage: '> LOGIC RESTORED. ''=='' compares. +25% sync.'
+  failMessage: '> INCORRECT. Use ''=='' to compare values.'

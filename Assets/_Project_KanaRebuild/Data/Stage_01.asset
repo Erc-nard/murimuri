@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e65b23487324447a0b95ebdc6982f275, type: 3}
+  m_Name: Stage_01
+  m_EditorClassIdentifier: Assembly-CSharp::KanaRebuild.StageData
+  stageIndex: 0
+  targetSyncRate: 25
+  backgroundLogs:
+  - '> SYSTEM BOOT...'
+  - '> Loading KANA.core v0.1.2'
+  - '> Initializing memory sectors...'
+  - '> Scanning corrupted files...'
+  - '> Found: Player.cs'
+  - '> Compiling Player.cs...'
+  - '> ERROR: Unexpected symbol at line 2'
+  - '> Missing semicolon detected'
+  problemCode: "[ERROR CODE]\n// Player.cs - Line 15-18\nvoid Start() {\n    int
+    health = 100_____\n    Debug.Log(health);\n}\n// Missing terminator"
+  choices:
+  - '[A] Add semicolon (;) after 100'
+  - '[B] Add comma (,) after 100'
+  - '[C] Add colon (:) after 100'
+  - '[D] Leave blank'
+  correctChoiceIndex: 0
+  successMessage: '> PATCH APPLIED. Syntax resolved. +25% sync.'
+  failMessage: '> PATCH FAILED. C# requires '';'' at end.'
