@@ -1,7 +1,7 @@
 # 내가 친구가 될 수 있을 리 없잖아 무리무리! (*무리가 아니었다?!)
 
 
-<img width="1186" height="820" alt="Image" src="https://github.com/user-attachments/assets/b10e34fc-9f62-4092-acae-23a4cb5a346a" />
+<img width="1536" height="1024" alt="Image" src="https://github.com/user-attachments/assets/d0850bcc-3055-4409-9cec-0ab3cd101d2a" />
 
 ```
 사이버 미소녀 '카나'와 두근두근 연애 생활...?!
