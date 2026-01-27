@@ -7,11 +7,11 @@ ID,Speaker,Dialogue,Video,NextScene,IsMonologue,Opt1_Text,Opt1_Target,Opt2_Text,
 6,,내 이름은…,,INPUT_NAME,,,,,
 7,카나,{PlayerName}… 그렇구나. 좋은 이름이네!,Kana_Happy,,,,,,
 8,카나,정말 반가워. 나는 카나야. 우리 함께 좋은 시간 보내자!,,,,,,,
-9,{PlayerName},어떻게 대답할까?,,CHOICE,TRUE,응<comma> 좋아!,10,글쎄...,22
+9,{PlayerName},어떻게 대답할까?,,CHOICE,TRUE,응. 좋아!,10,글쎄...,22
 10,카나,좋아! 기합이 제대로 들어가있네!,Kana_Excited,,,,,,
 11,카나,흐흥~.,,,,,,,
 12,카나,아! {PlayerName}이(가) 오면 같이 하고 싶었던게 있어. ,Kana_Smile,,,,,,
-13,카나,혹시 참<comma> 참<comma> 참! 이라고 알아?,,CHOICE,,응<comma> 알아,20,아니<comma> 몰라,14
+13,카나,혹시 참<comma> 참<comma> 참! 이라고 알아?,,CHOICE,,응. 알아,20,아니. 몰라,14
 14,{PlayerName},아니<comma> 처음 들어보는데?,,,,,,,
 15,카나,어머! {PlayerName}은(는) 모르는구나? 그럼 내가 설명해줄게!,Kana_Idle,,,,,,
 16,카나,자<comma> 카나가 이렇게 손을 올려서 참...참...참! 이라고 할거야.,,,,,,,
