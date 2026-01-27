@@ -532,6 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChamGameManager
   headDetector: {fileID: 400322133}
+  backgroundController: {fileID: 675442761}
   gameText: {fileID: 741536437}
   aiDirectionText: {fileID: 2142703887}
 --- !u!4 &400322135

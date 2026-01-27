@@ -42,15 +42,12 @@ public class BackgroundVideoController : MonoBehaviour
         {
             case AiChoice.Left:
                 videoPlayer.clip = leftVideo;
-                Debug.Log("AI Decision: Left -> Left Video Loaded");
                 break;
             case AiChoice.Center:
                 videoPlayer.clip = centerVideo;
-                Debug.Log("AI Decision: Center -> Center Video Loaded");
                 break;
             case AiChoice.Right:
                 videoPlayer.clip = rightVideo;
-                Debug.Log("AI Decision: Right -> Right Video Loaded");
                 break;
         }
 
