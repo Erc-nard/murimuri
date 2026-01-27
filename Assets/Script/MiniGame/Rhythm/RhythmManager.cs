@@ -1,36 +1,66 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // TextMeshPro 사용을 위해 필수
+using TMPro; 
+using UnityEngine.SceneManagement; 
+using System.Collections; 
 
 public class RhythmManager : MonoBehaviour
 {
     [Header("---- [설정: 프리팹 & 위치] ----")]
-    public GameObject notePrefab;       // 노트 프리팹
-    public Transform noteContainer;     // 노트가 담길 부모 객체
-    public RectTransform[] lanes;       // 3개의 레인 (Lane0, Lane1, Lane2)
-    public RectTransform judgmentLine;  // 판정선 (Y축 기준)
+    public GameObject notePrefab;       
+    public Transform noteContainer;     
+    public RectTransform[] lanes;       
+    public RectTransform judgmentLine;  
 
     [Header("---- [설정: 게임 플레이] ----")]
-    public float spawnInterval = 1.0f;  // 노트 생성 간격 (초)
-    public float hitRange = 100f;       // 판정 범위 (이 거리 안이면 Hit)
+    public float spawnInterval = 1.0f;  
+    public float hitRange = 100f;       
     
     [Header("---- [설정: UI] ----")]
-    public TextMeshProUGUI scoreText;   // 점수 표시 텍스트
+    public TextMeshProUGUI scoreText;   
+    public TextMeshProUGUI gameText;    // "준비...", "Miss!" 등 표시
 
     // 내부 변수
     private float timer = 0f;
     private int currentScore = 0;
+    private bool isGameEnded = false;
+    private bool isPlaying = false; 
 
     void Start()
     {
-        // 게임 시작 시 점수 초기화
         currentScore = 0;
+        isGameEnded = false;
+        isPlaying = false; 
         UpdateScoreUI();
+
+        StartCoroutine(GameStartRoutine());
+    }
+
+    IEnumerator GameStartRoutine()
+    {
+        if (gameText != null) 
+        {
+            gameText.gameObject.SetActive(true);
+            gameText.text = "준비...";
+        }
+
+        yield return new WaitForSeconds(2.0f); 
+
+        if (gameText != null) 
+        {
+            gameText.text = "Start!";
+            yield return new WaitForSeconds(1.0f);
+            gameText.text = ""; 
+        }
+
+        isPlaying = true; 
     }
 
     void Update()
     {
-        // 1. 노트 자동 생성 타이머
+        if (!isPlaying || isGameEnded) return;
+
+        // 1. 노트 자동 생성
         timer += Time.deltaTime;
         if (timer >= spawnInterval)
         {
@@ -38,133 +68,162 @@ public class RhythmManager : MonoBehaviour
             timer = 0f;
         }
 
-        // 2. 입력 처리 (PC 마우스 & 모바일 터치 통합)
+        // 2. 입력 처리 (터치/클릭)
         HandleInput();
+
+        // 3. ★ [추가] 놓친 노트(Miss) 체크
+        CheckMisses();
+    }
+
+    // ★ [핵심 1] 화면 밖으로 나간 노트 처리 (Miss 판정)
+    void CheckMisses()
+    {
+        // 리스트를 거꾸로 돌면서 삭제해야 에러가 안 납니다.
+        for (int i = noteContainer.childCount - 1; i >= 0; i--)
+        {
+            Transform note = noteContainer.GetChild(i);
+            RectTransform noteRect = note.GetComponent<RectTransform>();
+
+            // 노트의 바닥 위치 계산
+            float halfHeight = noteRect.rect.height * 0.5f; 
+            float noteBottomY = note.position.y - halfHeight;
+
+            // 판정선보다 훨씬 아래로 내려갔다면? (Miss!)
+            // hitRange만큼의 여유를 주고 그보다 더 내려갔을 때 처리
+            if (noteBottomY < judgmentLine.position.y - hitRange)
+            {
+                OnMiss(note.gameObject);
+            }
+        }
     }
 
     void SpawnNote()
     {
-        // 1. 랜덤 레인 선택
         int laneIndex = Random.Range(0, 3);
-
-        // 2. 노트 생성
         GameObject newNote = Instantiate(notePrefab, noteContainer);
 
-        // 3. X축 위치 맞추기 (레인의 월드 좌표 기준)
         Vector3 lanePos = lanes[laneIndex].transform.position;
-        newNote.transform.position = new Vector3(lanePos.x, 0, 0); // Y는 일단 0으로 둠
-
-        // 4. [핵심] Y축 위치를 화면 위쪽 바깥으로 강제 이동
-        RectTransform noteRect = newNote.GetComponent<RectTransform>();
+        newNote.transform.position = new Vector3(lanePos.x, 0, 0); 
         
-        // 화면 높이가 620이므로, 절반은 310입니다.
-        // 310보다 커야 화면 밖입니다. 넉넉하게 450으로 설정합니다.
-        // x값은 위에서 맞춘 값을 그대로 유지(anchoredPosition.x)
+        RectTransform noteRect = newNote.GetComponent<RectTransform>();
+        // 화면 위쪽에서 시작
         noteRect.anchoredPosition = new Vector2(noteRect.anchoredPosition.x, 450f);
     }
 
-    // 입력 처리 함수
     void HandleInput()
     {
-        // A. 모바일 터치 지원 (멀티 터치 가능)
         if (Input.touchCount > 0)
         {
             foreach (Touch touch in Input.touches)
             {
-                if (touch.phase == TouchPhase.Began) // 막 눌렀을 때만
-                {
-                    CheckHit(touch.position);
-                }
+                if (touch.phase == TouchPhase.Began) CheckHit(touch.position);
             }
         }
-        
-        // B. PC 마우스 클릭 지원 (테스트용)
-        if (Input.GetMouseButtonDown(0))
-        {
-            CheckHit(Input.mousePosition);
-        }
+        if (Input.GetMouseButtonDown(0)) CheckHit(Input.mousePosition);
     }
 
-    // 터치한 좌표가 어느 레인인지 계산
     void CheckHit(Vector2 inputPos)
     {
         float screenWidth = Screen.width;
-        float oneLaneWidth = screenWidth / 3f; // 화면을 3등분
-
+        float oneLaneWidth = screenWidth / 3f; 
         int laneIndex = -1;
 
-        if (inputPos.x < oneLaneWidth)
-        {
-            laneIndex = 0; // 왼쪽
-        }
-        else if (inputPos.x < oneLaneWidth * 2)
-        {
-            laneIndex = 1; // 가운데
-        }
-        else
-        {
-            laneIndex = 2; // 오른쪽
-        }
+        if (inputPos.x < oneLaneWidth) laneIndex = 0; 
+        else if (inputPos.x < oneLaneWidth * 2) laneIndex = 1; 
+        else laneIndex = 2; 
 
-        // 유효한 레인을 눌렀다면 판정 검사
-        if (laneIndex != -1)
-        {
-            CheckTiming(laneIndex);
-        }
+        if (laneIndex != -1) CheckTiming(laneIndex);
     }
 
-    // 실제 노트와 판정선 거리 계산
+    // ★ [핵심 2] 판정 로직 수정 (노트 최하단 기준)
     void CheckTiming(int laneIndex)
     {
-        // NoteContainer 안의 모든 노트를 검사
         foreach (Transform note in noteContainer)
         {
-            RectTransform noteRect = note.GetComponent<RectTransform>();
-            
-            // 1. 노트의 X위치가 내가 누른 레인의 X위치와 비슷한가? (오차 범위 10)
-            // (월드 좌표가 아니라 anchoredPosition으로 비교하여 같은 레인인지 확인)
-            float laneX = lanes[laneIndex].anchoredPosition.x;
-            // *주의: 레인 배치가 LayoutGroup이라 anchoredPosition이 0일 수도 있음. 
-            // 가장 확실한 건 World Position X 차이 비교
-            
+            if (note == null) continue;
+
+            // X축 체크 (같은 레인인지)
             if (Mathf.Abs(note.position.x - lanes[laneIndex].position.x) < 1.0f) 
             {
-                // 2. Y축 거리가 판정 범위 내인가?
-                float distance = Mathf.Abs(note.position.y - judgmentLine.position.y);
+                RectTransform noteRect = note.GetComponent<RectTransform>();
+
+                // 노트의 높이 절반 구하기
+                // (Pivot이 중앙(0.5, 0.5)이라고 가정)
+                float halfHeight = noteRect.rect.height * 0.5f; 
+
+                // 노트의 바닥 Y좌표 = 현재 중심 Y좌표 - 높이 절반
+                float noteBottomY = note.position.y - halfHeight;
+
+                // 판정선과 '노트 바닥' 사이의 거리 계산
+                float distance = Mathf.Abs(noteBottomY - judgmentLine.position.y);
                 
                 if (distance < hitRange)
                 {
                     OnHit(note.gameObject);
-                    break; // 한 번 터치에 노트 하나만 처리하고 종료
+                    break; // 한 번 터치에 하나만 처리
                 }
             }
         }
     }
 
-    // 판정 성공 시 처리
     void OnHit(GameObject note)
     {
-        Debug.Log("Hit Success!");
-
-        // 1. 점수 증가
+        // 점수 획득
         currentScore += 10;
+        UpdateScoreUI();
         
-        // 2. UI 갱신
+        // 노트 삭제
+        Destroy(note);
+
+        // 목표 달성 체크
+        if (currentScore >= 400)
+        {
+            EndGame();
+        }
+    }
+
+    // ★ [추가] 미스 처리 함수
+    void OnMiss(GameObject note)
+    {
+        // 1. 점수 깎기 (50점)
+        currentScore -= 50;
+
+        // 2. 0점 미만 방지
+        if (currentScore < 0) currentScore = 0;
+
+        // 3. UI 갱신
         UpdateScoreUI();
 
-        // 3. 이펙트 생성 (나중에 추가 가능)
-        // Instantiate(hitEffectPrefab, note.transform.position, Quaternion.identity);
+        // 4. "Miss" 표시 (잠깐 띄우기)
+        if (gameText != null)
+        {
+            StartCoroutine(ShowMissText());
+        }
 
-        // 4. 노트 제거
+        // 5. 노트 삭제
         Destroy(note);
     }
 
-    // UI 텍스트 갱신
+    IEnumerator ShowMissText()
+    {
+        gameText.text = "Miss!";
+        gameText.color = Color.red;
+        yield return new WaitForSeconds(0.5f);
+        gameText.text = ""; // 다시 끄기
+        gameText.color = Color.white;
+    }
+
     void UpdateScoreUI()
     {
-        if (scoreText != null)
-        {
-            scoreText.text = $"내 점수: {currentScore}점";
-        }
+        if (scoreText != null) scoreText.text = $"내 점수: {currentScore} / 400";
+    }
+
+    void EndGame()
+    {
+        if (isGameEnded) return; 
+        isGameEnded = true;
+
+        Debug.Log("목표 달성! 메인으로 돌아갑니다.");
+        SceneManager.LoadScene("PlayScene");
     }
 }
