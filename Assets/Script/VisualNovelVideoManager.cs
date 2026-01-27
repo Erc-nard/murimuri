@@ -144,19 +144,33 @@ public class VisualNovelVideoManager : MonoBehaviour
     {
         if (isWaitingForFace)
         {
-            // Enter 키를 누르면 넘어가기
-            if (Keyboard.current != null && Keyboard.current.enterKey.wasPressedThisFrame)
+            bool isFaceClose = false;
+
+            // [추가된 로직] HeadDetector에게 "지금 얼굴 가깝니?"라고 물어봄
+            if (headDetector != null)
             {
+                isFaceClose = headDetector.isFaceClose; 
+            }
+
+            // 키보드 엔터키 입력 확인 (테스트용 비상키)
+            bool isEnterPressed = (Keyboard.current != null && Keyboard.current.enterKey.wasPressedThisFrame);
+
+            // [조건] 얼굴이 가까워졌거나(True) OR 엔터키를 눌렀다면 진행
+            if (isFaceClose || isEnterPressed)
+            {
+                Debug.Log("얼굴 인식(또는 키입력) 성공! 다음 대사로 넘어갑니다.");
                 isWaitingForFace = false;
                 if (guideTextObject != null) guideTextObject.SetActive(false);
                 DisplayNextSentence();
             }
-            return;
+            return; // 여기서 리턴해서 아래 클릭 로직이 실행 안 되게 막음
         }
 
+        // 2. 평소 상태 (선택지나 이름 입력 중이면 클릭 방지)
         if ((choicePanel != null && choicePanel.activeSelf) ||
             (nameInputPanel != null && nameInputPanel.activeSelf)) return;
 
+        // 3. 일반 대사 넘기기 (마우스 클릭 or 스페이스바)
         bool isClick = Pointer.current != null && Pointer.current.press.wasPressedThisFrame;
         bool isSpace = Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame;
 
