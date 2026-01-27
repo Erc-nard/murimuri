@@ -8,7 +8,7 @@ ID,Speaker,Dialogue,Video,NextScene,IsMonologue,Opt1_Text,Opt1_Target,Opt2_Text,
 7,카나,정말 반가워. 나는 카나야. 우리 함께 좋은 시간 보내자!,,,,,,,
 8,{PlayerName},어떻게 대답할까?,,CHOICE,TRUE,응 좋아!,9,글쎄...,18
 9,카나,후후<comma> 좋아! 기합이 제대로 들어가있네!,Kana_Excited,,,,,,
-10,카나,아! {PlayerName}이(가) 오면 같이 하고 싶었던게 있어. 참참참이라고 알아?,Kana_Smile,CHOICE,,응 알아,16,아니 몰라,11
+10,카나,아! {PlayerName}이(가) 오면 같이 하고 싶었던게 있어. 참참참이라고 알아?,Kana_Smile,CHOICE,,응 알아,17,아니 몰라,11
 11,{PlayerName},아니<comma> 처음 들어보는데?,,,,,,,
 12,카나,어머! {PlayerName}은(는) 모르는구나? 그럼 내가 설명해줄게!,Kana_Idle,,,,,,
 13,카나,자<comma> 카나가 이렇게 손을 올려서 참.참.참. 이라고 할거야.,,,,,,,

@@ -9,7 +9,7 @@ public class EyeContactGameManager : MonoBehaviour
     public RectTransform eyeCursor; // 내 눈 (시선)
 
     [Header("Game Settings")]
-    public float hitRadius = 100f; // 판정 범위
+    public float hitRadius = 80f; // 판정 범위
     
     [Header("UI")]
     public Slider loveGauge;      // 호감도 게이지

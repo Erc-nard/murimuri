@@ -17,8 +17,8 @@ public class RhythmManager : MonoBehaviour
     public float hitRange = 100f;       
     
     [Header("---- [설정: UI] ----")]
-    public TextMeshProUGUI scoreText;   
-    public TextMeshProUGUI gameText;    // "준비...", "Miss!" 등 표시
+    public Text scoreText;   
+    public Text gameText;    // "준비...", "Miss!" 등 표시
 
     // 내부 변수
     private float timer = 0f;
@@ -171,22 +171,36 @@ public class RhythmManager : MonoBehaviour
         // 점수 획득
         currentScore += 10;
         UpdateScoreUI();
-        
+
+        if (gameText != null)
+        {
+            StartCoroutine(ShowHitText());
+        }
+
         // 노트 삭제
         Destroy(note);
 
         // 목표 달성 체크
-        if (currentScore >= 400)
+        if (currentScore >= 300)
         {
             EndGame();
         }
+    }
+
+    IEnumerator ShowHitText()
+    {
+        gameText.text = "Good!";
+        gameText.color = Color.green;
+        yield return new WaitForSeconds(0.5f);
+        gameText.text = ""; // 다시 끄기
+        gameText.color = Color.white;
     }
 
     // ★ [추가] 미스 처리 함수
     void OnMiss(GameObject note)
     {
         // 1. 점수 깎기 (50점)
-        currentScore -= 50;
+        currentScore -= 20;
 
         // 2. 0점 미만 방지
         if (currentScore < 0) currentScore = 0;
@@ -215,7 +229,7 @@ public class RhythmManager : MonoBehaviour
 
     void UpdateScoreUI()
     {
-        if (scoreText != null) scoreText.text = $"내 점수: {currentScore} / 400";
+        if (scoreText != null) scoreText.text = $"내 점수: {currentScore} / 300";
     }
 
     void EndGame()

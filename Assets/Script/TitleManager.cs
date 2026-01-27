@@ -1,20 +1,18 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // 씬 이동을 위해 필요
+using UnityEngine.SceneManagement;
 
 public class TitleManager : MonoBehaviour
 {
     public void ClickNewGame()
     {
-        // 1. 게임 데이터를 1챕터로 초기화해서 저장
-        // "SavedChapter"라는 이름의 사물함에 숫자 1을 넣음
-        PlayerPrefs.SetInt("SavedChapter", 1);
+        // 1. 대사 진행 순서를 0번(맨 처음)으로 초기화
+        // "SavedLineIndex"는 CSV 리스트의 몇 번째 대사를 보여줄지 결정하는 키입니다.
+        PlayerPrefs.SetInt("SavedLineIndex", 0);
+        // (선택) 호감도 같은 다른 스탯도 초기화
         PlayerPrefs.SetInt("SavedLoveScore", 0);
+        PlayerPrefs.Save(); // 저장 확정
 
-        // 저장을 확실하게 함
-        PlayerPrefs.Save();
-
-        // 2. 게임 씬(PlayScene)으로 이동
-        // 주의: Build Settings에 등록된 씬 이름과 똑같아야 합니다!
+        // 2. 게임 씬으로 이동
         SceneManager.LoadScene("PlayScene");
     }
 }

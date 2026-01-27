@@ -77,11 +77,13 @@ public class VisualNovelVideoManager : MonoBehaviour
         LoadDialogueFromCSV(csvFileName);
 
         // =========================================================
-        // ★ [핵심] 게임에서 돌아왔는지 확인하는 로직
+        // ★ [핵심] 저장된 데이터(새 게임 or 복귀) 불러오기
         // =========================================================
+
+        // CASE A: 미니게임에서 돌아온 경우
         if (PlayerPrefs.GetString("IsReturningFromGame") == "TRUE")
         {
-            // A. 참참참 게임처럼 승패 결과가 있는 경우
+            // 승패 결과 확인
             if (PlayerPrefs.HasKey("GameResult"))
             {
                 string result = PlayerPrefs.GetString("GameResult");
@@ -95,23 +97,26 @@ public class VisualNovelVideoManager : MonoBehaviour
                     int loseID = PlayerPrefs.GetInt("LoseTargetID", 0);
                     JumpToID(loseID);
                 }
-                PlayerPrefs.DeleteKey("GameResult"); // 결과 사용 후 삭제
+                PlayerPrefs.DeleteKey("GameResult");
             }
-            // B. 리듬게임/눈싸움처럼 그냥 다음 줄로 넘어가는 경우
+            // 단순 복귀 (다음 줄로)
             else
             {
                 int lastIndex = PlayerPrefs.GetInt("SavedLineIndex", 0);
-                currentLineIndex = lastIndex + 1; // 저장된 위치의 다음 줄
+                currentLineIndex = lastIndex + 1;
                 DisplayCurrentLine();
             }
 
-            // 복귀 처리 완료했으므로 플래그 삭제
+            // 복귀 플래그 해제
             PlayerPrefs.DeleteKey("IsReturningFromGame");
         }
+        // CASE B: 타이틀 화면에서 (새 게임/이어하기) 들어온 경우
         else
         {
-            // 처음 시작
-            StartDialogue();
+            // TitleManager에서 "새 게임" 누를 때 SavedLineIndex를 0으로 저장했으므로,
+            // 여기서 그 0을 불러와서 시작합니다. (이어하기라면 저장된 번호를 불러옴)
+            currentLineIndex = PlayerPrefs.GetInt("SavedLineIndex", 0);
+            DisplayCurrentLine();
         }
     }
 
