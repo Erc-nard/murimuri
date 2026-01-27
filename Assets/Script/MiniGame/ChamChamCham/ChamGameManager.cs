@@ -25,13 +25,13 @@ public class ChamGameManager : MonoBehaviour
         isPlaying = true;
 
         gameText.text = "준비..."; 
-        yield return new WaitForSeconds(2.0f); 
+        yield return new WaitForSeconds(1.5f); 
         
         gameText.text = "참!";
         yield return new WaitForSeconds(1.0f);
         
         gameText.text = "참!!";
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         gameText.text = "참!!!";
         
