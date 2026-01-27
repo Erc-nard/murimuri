@@ -4,14 +4,14 @@
 <img width="1186" height="820" alt="Image" src="https://github.com/user-attachments/assets/b10e34fc-9f62-4092-acae-23a4cb5a346a" />
 
 ```
-햄찌는 오늘도 달린다...!!!
+사이버 미소녀 '카나'와 두근두근 연애 생활...?!
 ```
 
 ---
 
 |팀원|github|
 |------|---|
-|김창균|https://github.com/|
+|김창균|https://github.com/akeastshore|
 |박승완|https://github.com/wanipark1004|
 |유은선|https://github.com/Erc-nard|
 
@@ -74,10 +74,7 @@
 
 - 개발 언어: C#
 - 게임 엔진: Unity
-- 백엔드: Node.js, MySQL, Mirror
-- UI: Figma
-- 소스:
-https://cupnooble.itch.io/sprout-lands-asset-pack, 카트라이더 BGM
+- 그래픽: Figma, Vroid Studio
 
 <br>
 
