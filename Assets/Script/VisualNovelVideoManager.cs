@@ -4,6 +4,14 @@ using UnityEngine.Video;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.Audio;
+
+[System.Serializable]
+public struct BGMData
+{
+    public string name;
+    public AudioClip clip;
+}
 
 [System.Serializable]
 public class DialogueLine
@@ -14,11 +22,15 @@ public class DialogueLine
     public string videoName;
     public string nextScene;
     public bool isMonologue;
-
     public string opt1Text;
     public int opt1TargetID;
     public string opt2Text;
     public int opt2TargetID;
+    public string bgmName;
+
+    // [추가] 호감도 점수 (CSV 12, 13번째 칸)
+    public int opt1Score;
+    public int opt2Score;
 }
 
 public class VisualNovelVideoManager : MonoBehaviour
@@ -44,77 +56,85 @@ public class VisualNovelVideoManager : MonoBehaviour
     public Button choiceButton2;
     public Text choiceButton2Text;
 
+    [Header("--- 오디오 설정 ---")]
+    public AudioSource bgmAudioSource;
+    public AudioMixerGroup bgmOutput;
+    public List<BGMData> bgmList;
+    private Dictionary<string, AudioClip> bgmDict = new Dictionary<string, AudioClip>();
+
     [Header("--- 디자인 설정 ---")]
     public Color normalColor = new Color(1f, 1f, 1f, 0.8f);
     public Color monologueColor = new Color(0.2f, 0.2f, 0.2f, 0.9f);
 
     private List<DialogueLine> scenarioData = new List<DialogueLine>();
     private int currentLineIndex = 0;
-    private string currentVideoName = ""; 
+    private string currentVideoName = "";
     private string playerName = "주인공";
 
+    // [추가] 호감도 변수
+    private int affectionScore = 0;
+    private const int MAX_SCORE = 2; // 총 선택지가 2개라고 가정했을 때 만점
+
     [Header("Face Detection")]
-    public HeadDirectionDetector headDetector; 
-    private bool isWaitingForFace = false;    
+    public HeadDirectionDetector headDetector;
+    private bool isWaitingForFace = false;
     public GameObject guideTextObject;
 
     void Start()
     {
-        // 1. 초기화 및 안전 장치
-        if (characterVideoPlayer == null || characterDisplay == null) return;
-
-        if (characterDisplay.texture == null && characterVideoPlayer.targetTexture != null)
+        // 1. 오디오 초기화
+        if (bgmAudioSource == null)
         {
-            characterDisplay.texture = characterVideoPlayer.targetTexture;
+            bgmAudioSource = GetComponent<AudioSource>();
+            if (bgmAudioSource == null) bgmAudioSource = gameObject.AddComponent<AudioSource>();
+        }
+        bgmAudioSource.loop = true;
+        if (bgmOutput != null) bgmAudioSource.outputAudioMixerGroup = bgmOutput;
+
+        bgmDict.Clear();
+        foreach (var data in bgmList)
+        {
+            if (!bgmDict.ContainsKey(data.name)) bgmDict.Add(data.name, data.clip);
+        }
+
+        // 2. UI 및 플레이어 초기화
+        if (characterVideoPlayer != null && characterDisplay != null)
+        {
+            if (characterDisplay.texture == null && characterVideoPlayer.targetTexture != null)
+                characterDisplay.texture = characterVideoPlayer.targetTexture;
         }
 
         if (dialogueBoxImage != null) dialogueBoxImage.gameObject.SetActive(false);
         if (choicePanel != null) choicePanel.SetActive(false);
         if (nameInputPanel != null) nameInputPanel.SetActive(false);
-        characterDisplay.gameObject.SetActive(false);
+        if (characterDisplay != null) characterDisplay.gameObject.SetActive(false);
 
         playerName = PlayerPrefs.GetString("PlayerName", "주인공");
+
+        // [추가] 저장된 호감도 불러오기 (미니게임 다녀와도 유지되도록)
+        affectionScore = PlayerPrefs.GetInt("AffectionScore", 0);
+
         LoadDialogueFromCSV(csvFileName);
 
-        // =========================================================
-        // ★ [핵심] 저장된 데이터(새 게임 or 복귀) 불러오기
-        // =========================================================
-
-        // CASE A: 미니게임에서 돌아온 경우
+        // 3. 저장된 위치 로드 로직
         if (PlayerPrefs.GetString("IsReturningFromGame") == "TRUE")
         {
-            // 승패 결과 확인
             if (PlayerPrefs.HasKey("GameResult"))
             {
                 string result = PlayerPrefs.GetString("GameResult");
-                if (result == "WIN")
-                {
-                    int winID = PlayerPrefs.GetInt("WinTargetID", 0);
-                    JumpToID(winID);
-                }
-                else // LOSE
-                {
-                    int loseID = PlayerPrefs.GetInt("LoseTargetID", 0);
-                    JumpToID(loseID);
-                }
+                if (result == "WIN") JumpToID(PlayerPrefs.GetInt("WinTargetID", 0));
+                else JumpToID(PlayerPrefs.GetInt("LoseTargetID", 0));
                 PlayerPrefs.DeleteKey("GameResult");
             }
-            // 단순 복귀 (다음 줄로)
             else
             {
-                int lastIndex = PlayerPrefs.GetInt("SavedLineIndex", 0);
-                currentLineIndex = lastIndex + 1;
+                currentLineIndex = PlayerPrefs.GetInt("SavedLineIndex", 0) + 1;
                 DisplayCurrentLine();
             }
-
-            // 복귀 플래그 해제
             PlayerPrefs.DeleteKey("IsReturningFromGame");
         }
-        // CASE B: 타이틀 화면에서 (새 게임/이어하기) 들어온 경우
         else
         {
-            // TitleManager에서 "새 게임" 누를 때 SavedLineIndex를 0으로 저장했으므로,
-            // 여기서 그 0을 불러와서 시작합니다. (이어하기라면 저장된 번호를 불러옴)
             currentLineIndex = PlayerPrefs.GetInt("SavedLineIndex", 0);
             DisplayCurrentLine();
         }
@@ -122,30 +142,23 @@ public class VisualNovelVideoManager : MonoBehaviour
 
     void Update()
     {
-        // 1. 얼굴 감지 대기
         if (isWaitingForFace)
         {
-            if (headDetector != null && headDetector.currentDistance <= 0.3f) 
+            if (headDetector != null && headDetector.currentDistance <= 0.3f)
             {
-                Debug.Log("얼굴 인식됨! 다음으로 넘어갑니다.");
-                isWaitingForFace = false; 
-                DisplayNextSentence();    
+                isWaitingForFace = false;
+                DisplayNextSentence();
             }
-            return; 
+            return;
         }
 
-        // 2. UI 터치 막기
         if ((choicePanel != null && choicePanel.activeSelf) ||
             (nameInputPanel != null && nameInputPanel.activeSelf)) return;
 
-        // 3. 입력 감지
         bool isClick = Pointer.current != null && Pointer.current.press.wasPressedThisFrame;
         bool isSpace = Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame;
 
-        if (isClick || isSpace)
-        {
-            DisplayNextSentence();
-        }
+        if (isClick || isSpace) DisplayNextSentence();
     }
 
     void LoadDialogueFromCSV(string filename)
@@ -167,28 +180,36 @@ public class VisualNovelVideoManager : MonoBehaviour
             int.TryParse(row[0].Trim(), out dl.id);
             dl.speakerName = row[1].Trim();
             dl.dialogueText = row[2].Replace("<comma>", ",").Trim();
-            dl.videoName = (row.Length > 3) ? row[3].Trim() : ""; 
+            dl.videoName = (row.Length > 3) ? row[3].Trim() : "";
             dl.nextScene = (row.Length > 4) ? row[4].Trim() : "";
             if (row.Length > 5 && row[5].Trim().ToUpper() == "TRUE") dl.isMonologue = true;
 
             if (row.Length > 7) { dl.opt1Text = row[6].Trim(); int.TryParse(row[7].Trim(), out dl.opt1TargetID); }
             if (row.Length > 9) { dl.opt2Text = row[8].Trim(); int.TryParse(row[9].Trim(), out dl.opt2TargetID); }
+            if (row.Length > 10) { dl.bgmName = row[10].Trim(); }
+
+            // [추가] 점수 파싱 (11번, 12번 인덱스)
+            if (row.Length > 11) int.TryParse(row[11].Trim(), out dl.opt1Score);
+            if (row.Length > 12) int.TryParse(row[12].Trim(), out dl.opt2Score);
 
             scenarioData.Add(dl);
         }
     }
 
-    public void StartDialogue()
-    {
-        currentLineIndex = 0;
-        DisplayCurrentLine();
-    }
-
     public void DisplayNextSentence()
     {
+        // 현재 줄의 NextScene이 CHECK_ENDING이면 엔딩 분기 검사
         if (currentLineIndex < scenarioData.Count)
         {
             DialogueLine currentLine = scenarioData[currentLineIndex];
+
+            // [핵심] 엔딩 분기점 처리
+            if (currentLine.nextScene == "CHECK_ENDING")
+            {
+                CheckEndingRoute();
+                return;
+            }
+
             if (!string.IsNullOrEmpty(currentLine.nextScene) && currentLine.nextScene.StartsWith("JUMP_"))
             {
                 int targetID = int.Parse(currentLine.nextScene.Replace("JUMP_", ""));
@@ -213,16 +234,18 @@ public class VisualNovelVideoManager : MonoBehaviour
         dialogueText.text = finalDialogue;
         if (dialogueBoxImage != null) dialogueBoxImage.gameObject.SetActive(true);
 
-        if (line.isMonologue) 
-        { 
-            dialogueBoxImage.color = monologueColor; 
-            nameText.gameObject.SetActive(false); 
+        if (line.isMonologue)
+        {
+            dialogueBoxImage.color = monologueColor;
+            nameText.gameObject.SetActive(false);
         }
-        else 
-        { 
-            dialogueBoxImage.color = normalColor; 
-            nameText.gameObject.SetActive(true); 
+        else
+        {
+            dialogueBoxImage.color = normalColor;
+            nameText.gameObject.SetActive(true);
         }
+
+        PlayBGM(line.bgmName);
 
         if (!string.IsNullOrEmpty(line.videoName))
         {
@@ -254,45 +277,89 @@ public class VisualNovelVideoManager : MonoBehaviour
                 choicePanel.SetActive(true);
                 if (choiceButton1Text != null) choiceButton1Text.text = line.opt1Text;
                 if (choiceButton2Text != null) choiceButton2Text.text = line.opt2Text;
-                if (choiceButton1 != null) { choiceButton1.onClick.RemoveAllListeners(); choiceButton1.onClick.AddListener(() => { choicePanel.SetActive(false); JumpToID(line.opt1TargetID); }); }
-                if (choiceButton2 != null) { choiceButton2.onClick.RemoveAllListeners(); choiceButton2.onClick.AddListener(() => { choicePanel.SetActive(false); JumpToID(line.opt2TargetID); }); }
+
+                // [수정] 버튼 클릭 시 점수 추가 로직 적용
+                if (choiceButton1 != null)
+                {
+                    choiceButton1.onClick.RemoveAllListeners();
+                    choiceButton1.onClick.AddListener(() =>
+                    {
+                        AddScore(line.opt1Score); // 점수 추가
+                        choicePanel.SetActive(false);
+                        JumpToID(line.opt1TargetID);
+                    });
+                }
+                if (choiceButton2 != null)
+                {
+                    choiceButton2.onClick.RemoveAllListeners();
+                    choiceButton2.onClick.AddListener(() =>
+                    {
+                        AddScore(line.opt2Score); // 점수 추가
+                        choicePanel.SetActive(false);
+                        JumpToID(line.opt2TargetID);
+                    });
+                }
             }
             return;
         }
 
-        // ==========================================
-        // ★ [핵심] 씬 이동 (게임 실행) 로직 수정
-        // ==========================================
-        if (!string.IsNullOrEmpty(line.nextScene) 
+        if (!string.IsNullOrEmpty(line.nextScene)
             && !line.nextScene.StartsWith("JUMP_")
-            && line.nextScene != "WAIT_FACE")
+            && line.nextScene != "WAIT_FACE"
+            && line.nextScene != "CHECK_ENDING") // CHECK_ENDING은 위에서 처리함
         {
-            // 1. 현재 몇 번째 줄인지 기억 (책갈피)
             PlayerPrefs.SetInt("SavedLineIndex", currentLineIndex);
-            
-            // 2. 돌아올 때를 위해 승/패 분기 ID 미리 저장 (필요한 경우)
-            PlayerPrefs.SetInt("WinTargetID", line.opt1TargetID); 
+            PlayerPrefs.SetInt("AffectionScore", affectionScore); // 씬 이동 시 점수 저장
+            PlayerPrefs.SetInt("WinTargetID", line.opt1TargetID);
             PlayerPrefs.SetInt("LoseTargetID", line.opt2TargetID);
-            
-            // 3. "나 게임하러 간다" 표시
             PlayerPrefs.SetString("IsReturningFromGame", "TRUE");
-
             PlayerPrefs.Save();
-
-            // 4. 씬 이동
             SceneManager.LoadScene(line.nextScene);
-            return; 
+            return;
         }
 
         if (line.nextScene == "WAIT_FACE")
         {
             isWaitingForFace = true;
-            if(guideTextObject != null) guideTextObject.SetActive(true);
+            if (guideTextObject != null) guideTextObject.SetActive(true);
         }
         else
         {
             isWaitingForFace = false;
-            if(guideTextObject != null) guideTextObject.SetActive(false);
+            if (guideTextObject != null) guideTextObject.SetActive(false);
+        }
+    }
+
+    // [추가] 점수 추가 함수
+    void AddScore(int score)
+    {
+        affectionScore += score;
+        Debug.Log($"현재 호감도: {affectionScore}");
+        PlayerPrefs.SetInt("AffectionScore", affectionScore); // 즉시 저장
+    }
+
+    // [핵심] 엔딩 분기 처리 함수
+    void CheckEndingRoute()
+    {
+        Debug.Log($"엔딩 분기점 도착! 최종 점수: {affectionScore}");
+
+        // 점수가 2점 이상 (True End) -> 314번으로 이동
+        if (affectionScore >= 2)
+        {
+            Debug.Log(">>> 트루 엔딩 루트 진입");
+            JumpToID(314);
+        }
+        // 점수가 1점 이상 (Normal End) -> 279번으로 이동
+        else if (affectionScore >= 1)
+        {
+            Debug.Log(">>> 노말 엔딩 루트 진입");
+            JumpToID(279);
+        }
+        // 점수가 0점 (Bad End) -> 248번(공포 루트)으로 이동
+        else
+        {
+            Debug.Log(">>> 배드 엔딩 루트 진입");
+            JumpToID(248);
         }
     }
 
@@ -325,7 +392,6 @@ public class VisualNovelVideoManager : MonoBehaviour
     {
         string path = "Videos/" + videoName;
         VideoClip clip = Resources.Load<VideoClip>(path);
-
         if (clip != null)
         {
             characterVideoPlayer.clip = clip;
@@ -334,9 +400,24 @@ public class VisualNovelVideoManager : MonoBehaviour
             characterDisplay.gameObject.SetActive(true);
             currentVideoName = videoName;
         }
-        else
+    }
+
+    void PlayBGM(string bgmName)
+    {
+        if (string.IsNullOrEmpty(bgmName)) return;
+        if (bgmName.ToUpper() == "STOP" || bgmName.ToUpper() == "NONE")
         {
-            Debug.LogError($"🚨 영상을 찾을 수 없습니다: {path}");
+            bgmAudioSource.Stop();
+            return;
+        }
+
+        if (bgmDict.ContainsKey(bgmName))
+        {
+            AudioClip nextClip = bgmDict[bgmName];
+            if (bgmAudioSource.clip == nextClip && bgmAudioSource.isPlaying) return;
+
+            bgmAudioSource.clip = nextClip;
+            bgmAudioSource.Play();
         }
     }
 }

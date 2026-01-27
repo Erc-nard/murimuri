@@ -1,74 +1,49 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
-using TMPro; // TextMeshPro 사용
 
 public class SettingsManager : MonoBehaviour
 {
     [Header("Audio Settings")]
-    public AudioMixer audioMixer; // 아까 만든 믹서
+    public AudioMixer audioMixer; // 'MasterMixer' 연결
     public Slider bgmSlider;
     public Slider sfxSlider;
 
-    [Header("Code Popup Settings")]
-    public GameObject codePopupPanel;  // 팝업창 전체
-    public InputField codeInput;   // 코드 입력칸
-    public TextMeshProUGUI errorText;  // 빨간색 에러 메시지
-
-    private const string SECRET_CODE = "aaaa"; // 정답 코드
+    // (참고) 다른 스크립트에서 선언된 UI 패널이라고 가정
+    // public GameObject codePopupPanel; 
+    // public TextMeshProUGUI errorText; 
 
     void Start()
     {
-        // 시작할 때 팝업 숨기기
-        codePopupPanel.SetActive(false);
-        errorText.text = "";
+        // codePopupPanel.SetActive(false); // UI 관련 코드는 상황에 맞게 사용
+        // errorText.text = "";
 
-        // 슬라이더 초기값 설정 (저장된 값이 있다면 불러오는 로직이 여기에 들어감)
-        bgmSlider.value = 0.5f;
-        sfxSlider.value = 0.5f;
+        // 저장된 볼륨값 로드 (없으면 기본값 0.5)
+        float savedBgm = PlayerPrefs.GetFloat("BGMVolume", 0.5f);
+        float savedSfx = PlayerPrefs.GetFloat("SFXVolume", 0.5f);
+
+        bgmSlider.value = savedBgm;
+        sfxSlider.value = savedSfx;
+
+        // 초기 볼륨 적용
+        SetBGMVolume(savedBgm);
+        SetSFXVolume(savedSfx);
     }
 
-    // === 1. 오디오 조절 함수 ===
     public void SetBGMVolume(float volume)
     {
-        // 소리는 로그 스케일로 조절해야 자연스러움 (0.0001 ~ 1 -> -80dB ~ 0dB)
+        // 0.0001f는 로그 계산시 -Infinity 방지용 최소값
+        if (volume <= 0) volume = 0.0001f;
+
         audioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("BGMVolume", volume); // 값 저장
     }
 
     public void SetSFXVolume(float volume)
     {
+        if (volume <= 0) volume = 0.0001f;
+
         audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
-    }
-
-    // === 2. 코드 팝업 관련 함수 ===
-
-    // 코드 버튼 눌렀을 때
-    public void OpenPopup()
-    {
-        codePopupPanel.SetActive(true);
-        codeInput.text = ""; // 입력창 초기화
-        errorText.text = ""; // 에러 메시지 초기화
-    }
-
-    // 팝업 닫기 버튼 눌렀을 때
-    public void ClosePopup()
-    {
-        codePopupPanel.SetActive(false);
-    }
-
-    // 확인 버튼 눌렀을 때 (검사 로직)
-    public void CheckCode()
-    {
-        if (codeInput.text == SECRET_CODE)
-        {
-            Debug.Log("Correct Code");
-            // 여기에 성공 시 실행할 코드 작성 (예: 아이템 지급, 씬 이동 등)
-            ClosePopup(); // 성공하면 창 닫기
-        }
-        else
-        {
-            errorText.text = "Invalid Code";
-            // 흔들리는 애니메이션을 추가하면 더 좋음
-        }
+        PlayerPrefs.SetFloat("SFXVolume", volume); // 값 저장
     }
 }
