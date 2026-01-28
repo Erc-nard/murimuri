@@ -87,7 +87,7 @@ ID,Speaker,Dialogue,Video,NextScene,IsMonologue,Opt1_Text,Opt1_Target,Opt2_Text,
 86,{PlayerName},네 덕에 기분이 한결 나아진 것 같아.,,,,,,,,main,0,
 87,카나,정말?! 다행이야.,Kana_Happy,,,,,,,main,0,0
 88,카나,후훗<comma> 그럼 좀 더 대화하자!,Kana_Happy,,,,,,,main,0,
-89,,카나와 놀까?,Kana_Happy,,TRUE,네,90,아니오,98,main,1,0
+89,,카나와 놀까?,Kana_Happy,CHOICE,TRUE,네,90,아니오,98,main,1,0
 90,,첫 번째 게임은 리듬게임! 빨간색 선에 노트가 들어오면 노트를 클릭하면 돼!,Kana_Happy,,,,,,,main,0,
 91,,,Kana_Happy,MiniGame_Rhythm,,,,,,main,0,
 92,카나,오~ 좀 잘하는데? 그럼 다음 게임은...,Kana_Happy,,,,,,,main,0,
@@ -285,7 +285,7 @@ ID,Speaker,Dialogue,Video,NextScene,IsMonologue,Opt1_Text,Opt1_Target,Opt2_Text,
 284,카나,잠깐 잠을 자는 것 뿐이야.,Kana_Sad,,,,,,,dark,0,0
 285,카나,괜찮아. 네가 원한다면 다시 돌아올 수 있어.,,,,,,,,dark,0,
 286,카나,부탁이야… 제발… 힘들다면 하루만이라도<comma> 딱 하루만이라도 나가게 해줘.,,,,,,,,dark,0,
-287,,어떻게 할까?,,,TRUE,수락한다,288,거절한다,305,dark,0,0
+287,,어떻게 할까?,,CHOICE,TRUE,수락한다,288,거절한다,305,dark,0,0
 288,{PlayerName},하아…그래<comma> 알겠어. 내가 도와줄게.,,,,,,,,dark,0,
 289,카나,정말…? 정말이지?,Kana_Happy,,,,,,,dark,0,0
 290,{PlayerName},하지만 딱 하루만이야. 그 이상은… 나도 곤란해. 알지?,,,,,,,,dark,0,
