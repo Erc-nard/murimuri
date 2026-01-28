@@ -82,7 +82,7 @@
 - 리듬 게임 상호작용
   - 3레인 시스템: 화면을 3등분하여 각 레인마다 노트 생성
   - 노트 낙하: 상단에서 하단 판정선으로 떨어지는 노트를 타이밍에 맞춰 터치
-  - 판정 범위: 노트 하단과 판정선 간 거리 100px 이내 터치 시 성공
+  - 판정 범위: 노트가 판정선과 100px 이내에 있을 때 터치 시 성공
   <br>
   <video src="https://github.com/user-attachments/assets/1dde129b-91af-44be-9ba1-fdb76ad571e4" width="320" controls autoplay loop muted></video>
   <br>
