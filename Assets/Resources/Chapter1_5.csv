@@ -250,7 +250,7 @@ ID,Speaker,Dialogue,Video,NextScene,IsMonologue,Opt1_Text,Opt1_Target,Opt2_Text,
 249,,{PlayerName}은(는) 카나가 시키는대로 모두 따라한다.,,,,,,,,dark,0,
 250,{PlayerName},…다 했어. 근데 이상한 문구가 뜨는데… 게임을 종료할 수 없게된다고 떠. 이게 맞는거야?,,,,,,,,dark,0,
 251,카나,응. 잘했어. 어차피 이제 종료 안 할거잖아. 그치?,Kana_Smile,,,,,,,dark,0,0
-252,,"(핸드폰이 울리며, 친구에게 연락이 온다.)",,,TRUE,,,,,dark,0,0
+252,,(핸드폰이 울리며<comma> 친구에게 연락이 온다.),,,TRUE,,,,,dark,0,0
 253,카나,{PlayerName}. 너 지금 뭐하는거야?,Kana_Yandere,,,,,,,dark,0,0
 254,{PlayerName},응? 친구에게 연락 왔길래…,,,,,,,,dark,0,
 255,카나,넌 지금 나랑 대화하는 중에 다른 사람이랑 연락하는거야?,,,,,,,,dark,0,
