@@ -14,18 +14,18 @@ ID,Speaker,Dialogue,Video,NextScene,IsMonologue,Opt1_Text,Opt1_Target,Opt2_Text,
 13,카나,혹시 참<comma> 참<comma> 참! 이라고 알아?,,CHOICE,,응. 알아,20,아니. 몰라,14,main,0,0
 14,{PlayerName},아니<comma> 처음 들어보는데?,,,,,,,,main,0,
 15,카나,어머! {PlayerName}은(는) 모르는구나? 그럼 내가 설명해줄게!,Kana_Idle,,,,,,,main,0,0
-16,카나,자<comma> 카나가 이렇게 손을 올려서 참...참...참! 이라고 할거야.,Kana_Idle,,,,,,,main,0,
-17,카나,마지막 참을 말하고 손을 방향을 정할건데 같은 방향이면 패배<comma> 다른방향이면 네가 이기는거야!,Kana_Idle,,,,,,,main,0,
-18,카나,좋아! 그럼 해보자!,Kana_Happy,MiniGame_ChamChamCham,,,22,,28,main,0,1
+16,카나,자<comma> 카나가 이렇게 손을 올려서 참...참...참! 이라고 할거야.,Kana_Idle,,,,,,,main,0,0
+17,카나,마지막 참을 말하고 손을 방향을 정할건데 같은 방향이면 패배<comma> 다른방향이면 네가 이기는거야!,Kana_Idle,,,,,,,main,0,0
+18,카나,좋아! 그럼 해보자!,Kana_Happy,MiniGame_ChamChamCham,,,22,,28,main,0,0
 19,{PlayerName},응<comma> 알고 있어.,Kana_Happy,,,,,,,main,0,
-20,카나,앗<comma> 알고 있구나! 그래도 혹시 모르니까 내가 다시 알려줄게!,Kana_Smile,JUMP_16,,,,,,main,0,
-21,카나,후후. 괜찮아. 우린 금방 좋은 친구가 될거야!,Kana_Smile,JUMP_11,,,,,,main,0,
+20,카나,앗<comma> 알고 있구나! 그래도 혹시 모르니까 내가 다시 알려줄게!,Kana_Smile,JUMP_16,,,,,,main,0,0
+21,카나,후후. 괜찮아. 우린 금방 좋은 친구가 될거야!,Kana_Smile,JUMP_11,,,,,,main,0,0
 22,카나,으앙~! 내가 지다니...!,Kana_Lose,,,,,,,main,0,0
-23,{PlayerName},헉<comma> 내가 이겼네? 그럼 소원 하나 들어줘!,Kana_Lose,,,,,,,main,0,
+23,{PlayerName},헉<comma> 내가 이겼네? 그럼 소원 하나 들어줘!,Kana_Lose,,,,,,,main,0,0
 24,카나,우으... 알겠어. 무슨 소원이야?,Kana_Sad,,,,,,,main,0,0
-25,{PlayerName},딱밤 한 대 맞기! 이마 대.,Kana_Sad,,,,,,,main,0,
+25,{PlayerName},딱밤 한 대 맞기! 이마 대.,Kana_Sad,,,,,,,main,0,0
 26,,당신은 카나의 이마에 가볍게 딱밤을 때렸다.,Kana_Sad,,TRUE,,,,,main,0,0
-27,카나,이이....!! 다음엔 안봐줘!,Kana_Sad,JUMP_37,,,,,,main,0,
+27,카나,이이....!! 다음엔 안봐줘!,Kana_Sad,JUMP_37,,,,,,main,0,0
 28,카나,야호! 내가 이겼다! 봤지 봤지?,Kana_Win,,,,,,,main,0,0
 29,카나,승부는 승부니까! 그럼 내 소원을 한번만 들어줘.,Kana_Excited,,,,,,,main,0,0
 30,{PlayerName},뭐...? 뭐. 어려운 것만 아니라면...,Kana_Excited,,,,,,,main,0,
@@ -33,35 +33,35 @@ ID,Speaker,Dialogue,Video,NextScene,IsMonologue,Opt1_Text,Opt1_Target,Opt2_Text,
 32,,,Kana_Smile,WAIT_FACE,TRUE,,,,,main,0,0
 33,,카나가 당신의 머리에 딱밤을 놓았다!,Kana_Smile,,TRUE,,,,,main,0,0
 34,카나,뭘 기대한거야?! 바-보.,Kana_Smile,,,,,,,main,0,0
-35,{PlayerName},이건 내 벌칙인거 같은데…,Kana_Smile,,,,,,,main,0,
+35,{PlayerName},이건 내 벌칙인거 같은데…,Kana_Smile,,,,,,,main,0,0
 36,카나,약속 지켜줘서 고마워!,Kana_Happy,,JUMP_37,,,,,main,0,0
 37,카나,흐흥~ 그럼 이제 뭐하고 놀까? 아<comma> 아직 너의 얘기를 많이 듣지 못한거 같아.,Kana_Idle,,,,,,,main,0,0
-38,카나,너의 얘기를 들려줘!,Kana_Idle,,,,,,,main,0,
+38,카나,너의 얘기를 들려줘!,Kana_Idle,,,,,,,main,0,0
 39,{PlayerName},나는… 음… 그러니까…,Kana_Idle,,,,,,,main,0,
 40,카나,후훗<comma> 그럼 내가 먼저 얘기할까? 내 이름이 카나라는건 말했고… 나이는 23살이야!,Kana_Smile,,,,,,,main,0,0
 41,카나,뭐야<comma> 그 표정은? 내가 23살로 안보인다는거야?! 정말이지… (뿌),Kana_Angry,,,,,,,main,0,0
-42,{PlayerName},아니<comma> 아니… 너무 이..이뻐서…,Kana_Angry,,,,,,,main,0,
+42,{PlayerName},아니<comma> 아니… 너무 이..이뻐서…,Kana_Angry,,,,,,,main,0,0
 43,카나,(펑!) 뭐야?! 읏..으읏… 부끄럽게…,Kana_Smile,,,,,,,main,0,0
-44,카나,고마워. 너도 정말 이뻐. 내가 보기엔 누구보다 이쁘고 잘생겼어. 인기도 많겠는걸?,Kana_Smile,,,,,,,main,0,
-45,{PlayerName},고마워. 그치만 나는 친구를… 사귀어 본적이 없어.,Kana_Smile,,,,,,,main,0,
+44,카나,고마워. 너도 정말 이뻐. 내가 보기엔 누구보다 이쁘고 잘생겼어. 인기도 많겠는걸?,Kana_Smile,,,,,,,main,0,0
+45,{PlayerName},고마워. 그치만 나는 친구를… 사귀어 본적이 없어.,Kana_Smile,,,,,,,main,0,0
 46,{PlayerName},학교에서도 아싸고… 말주변도 없어서 알바도 겨우 하고있어…,Kana_Sad,,,,,,,main,0,0
 47,카나,그렇구나… 정말 힘들었겠다.,Kana_Sad,,,,,,,main,0,
 48,카나,음… 음음… 그래! 좋아! 내가 너의 첫번째 친구가 되어줄게. 어때?,Kana_Excited,,,,,,,main,0,0
-49,{PlayerName},정말 그래도 돼?,Kana_Excited,,,,,,,main,0,
-50,카나,물론이지! 헤헤. 정말 기쁘다. 우리 오늘부터 친구하는거야~!,Kana_Excited,,,,,,,main,0,
-51,{PlayerName},응<comma> 알겠어.,Kana_Excited,,,,,,,main,0,
+49,{PlayerName},정말 그래도 돼?,Kana_Excited,,,,,,,main,0,0
+50,카나,물론이지! 헤헤. 정말 기쁘다. 우리 오늘부터 친구하는거야~!,Kana_Excited,,,,,,,main,0,0
+51,{PlayerName},응<comma> 알겠어.,Kana_Excited,,,,,,,main,0,0
 52,,그 후로 카나는 나의 좋은 친구가 되어줬다. 이제 사람과 대화할 수 있을 거란 자신감이 생겼다!,Kana_Excited,,TRUE,,,,,main,0,0
 53,,학교에 간 {PlayerName}.,School,,TRUE,,,,,main,0,0
-54,{PlayerName},휴… 오늘도 나 혼자네.,,,,,,,,main,0,
-55,친구1,저기… 나 옆에 앉아도 돼?,,,,,,,,main,0,
-56,{PlayerName},여기… 먼지 묻어서 다른데 앉는게 좋을거같아.,,,,,,,,main,0,
-57,친구1,아.. 그렇구나 알겠어.,,,,,,,,main,0,
+54,{PlayerName},휴… 오늘도 나 혼자네.,,,,,,,,main,0,0
+55,친구1,저기… 나 옆에 앉아도 돼?,,,,,,,,main,0,0
+56,{PlayerName},여기… 먼지 묻어서 다른데 앉는게 좋을거같아.,,,,,,,,main,0,0
+57,친구1,아.. 그렇구나 알겠어.,,,,,,,,main,0,0
 58,{PlayerName},(나 방금 어색하지 않았겠지? 사람이랑 잘 대화한거 같아 다행이다. 역시 카나 덕분이야.),,,TRUE,,,,,main,0,0
-59,친구1,뭐야…? 얼굴은 괜찮은데 이상한 애네…,,,,,,,,main,0,
+59,친구1,뭐야…? 얼굴은 괜찮은데 이상한 애네…,,,,,,,,main,0,0
 60,,학교가 끝나 알바를 하러 왔다.,Arbeit,,TRUE,,,,,main,0,0
-61,사장,{PlayerName}. 설거지 다 됐니?,,,,,,,,main,0,
-62,{PlayerName},앗…네…! 거의 다 했어요…,,,,,,,,main,0,
-63,사장,너 그거 다 하면 홀 좀 도와주라. 오늘따라 사람이 많아서 힘이 딸리네.,,,,,,,,main,0,
+61,사장,{PlayerName}. 설거지 다 됐니?,,,,,,,,main,0,0
+62,{PlayerName},앗…네…! 거의 다 했어요…,,,,,,,,main,0,0
+63,사장,너 그거 다 하면 홀 좀 도와주라. 오늘따라 사람이 많아서 힘이 딸리네.,,,,,,,,main,0,0
 64,{PlayerName},네…? 네….,,,,,,,,main,0,
 65,{PlayerName},(내가 잘 할 수 있을까? 카나가 이것저것 알려줬으니까… 잘 할 수 있을거야…!),,,,,,,,main,0,
 66,{PlayerName},주….주주주주주주주주주문 하..세욧…,,,,,,,,main,0,
