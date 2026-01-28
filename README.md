@@ -115,6 +115,6 @@
 <br>
 
 
-### 🟡 EXE 파일
+### 🟡 APK 파일
 
-[여기](https://github.com/Erc-nard/campusmap/releases/download/v0.1.0-alpha/campusmap-v0.1.0-alpha.apk)를 클릭하여 바로 내려받거나, Releases 탭에서 내역을 확인할 수 있습니다.
+[여기](sha256:75c583abfa8ee8ab61be750b703db083aa8412125c2e3adb1342c1f0cb131847)를 클릭하여 바로 내려받거나, Releases 탭에서 내역을 확인할 수 있습니다.
