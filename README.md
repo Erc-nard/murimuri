@@ -54,7 +54,7 @@
   - AI 공격 방향: 배경 영상과 동기화된 AI의 공격 방향 결정
   - 카운트다운: "준비..." → "참!" → "참!!" → "참!!!" 타이밍 시퀀스
   <br>
-  <video src="https://github.com/user-attachments/assets/53ba55c8-66a8-48d3-a07a-878465a5b4e0" width="320" controls autoplay loop muted></video>
+  <video src="https://github.com/user-attachments/assets/128a8057-7879-458e-85c3-f8f2dade0947" width="320" controls autoplay loop muted></video>
   <br>
 - 공격 회피 시스템
   - AI 공격: 왼쪽(👈) / 오른쪽(👉) / 중앙(👇) 중 랜덤 선택
