@@ -112,4 +112,4 @@
 
 ### 🟡 APK 파일
 
-[여기](https://github.com/Erc-nard/murimuri/releases/download/v1.0/murimuri.apk)를 클릭하여 바로 내려받거나, Releases 탭에서 내역을 확인할 수 있습니다.
+[여기](https://github.com/Erc-nard/murimuri/releases/download/v1.1/murimuri.apk)를 클릭하여 바로 내려받거나, Releases 탭에서 내역을 확인할 수 있습니다.
