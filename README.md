@@ -69,7 +69,7 @@
   - 캐릭터 피드백: 상황(Normal, Correct, Wrong, Death)에 따른 실시간 영상 전환
   - 시각 연출: 정답 시 화이트 페이드 효과 및 게이지 위험 시 깜박임 효과
   <br>
-  <video src="https://imgur.com/a/iYPwe4L" width="320" controls autoplay loop muted></video>
+  <video src="https://github.com/user-attachments/assets/1a235867-9b35-417a-a893-2718669f084c" width="320" controls autoplay loop muted></video>
   <br>
 - 동기화 게이지 및 페널티
   - 정답 시 **+25%**, 오답 시 **-50%** (2회 오답 시 시스템 복구 실패)
