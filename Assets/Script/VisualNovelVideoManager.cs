@@ -110,15 +110,20 @@ public class VisualNovelVideoManager : MonoBehaviour
         if (characterDisplay != null) characterDisplay.gameObject.SetActive(false);
 
         playerName = PlayerPrefs.GetString("PlayerName", "주인공");
-
-        // [추가] 저장된 호감도 불러오기 (미니게임 다녀와도 유지되도록)
-        affectionScore = PlayerPrefs.GetInt("AffectionScore", 0);
-
         LoadDialogueFromCSV(csvFileName);
 
+        // =========================================================
+        // [수정 핵심] 점수 초기화 로직 분기
+        // =========================================================
+
         // 3. 저장된 위치 로드 로직
+        // 미니게임에서 돌아온 경우 (점수를 유지해야 함)
         if (PlayerPrefs.GetString("IsReturningFromGame") == "TRUE")
         {
+            // 저장해뒀던 점수를 불러옴
+            affectionScore = PlayerPrefs.GetInt("AffectionScore", 0);
+            Debug.Log($"[게임 복귀] 점수 로드됨: {affectionScore}");
+
             if (PlayerPrefs.HasKey("GameResult"))
             {
                 string result = PlayerPrefs.GetString("GameResult");
@@ -133,8 +138,13 @@ public class VisualNovelVideoManager : MonoBehaviour
             }
             PlayerPrefs.DeleteKey("IsReturningFromGame");
         }
+        // 게임을 처음 켜거나, 아예 새로 시작하는 경우 (점수 리셋)
         else
         {
+            affectionScore = 0; // 점수 0으로 초기화
+            PlayerPrefs.SetInt("AffectionScore", 0); // 저장된 데이터도 리셋
+            Debug.Log("[새 게임] 점수가 0으로 초기화되었습니다.");
+
             currentLineIndex = PlayerPrefs.GetInt("SavedLineIndex", 0);
             DisplayCurrentLine();
         }
