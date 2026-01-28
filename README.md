@@ -69,7 +69,7 @@
   - 타겟 이동: 도망다니는 타겟을 일정 시간 이상 시선으로 고정해야 성공
   - 거리 판정: 눈 커서와 타겟 간 거리가 80px 이내일 때 히트 판정
   <br>
-  <video src="https://github.com/user-attachments/assets/426cc5d3-399e-4489-8e22-90dea59424a9" width="320" controls autoplay loop muted></video>
+  <video src="https://github.com/user-attachments/assets/397bce41-eb03-4c32-a830-d603fd3906c6" width="320" controls autoplay loop muted></video>
   <br>
 - 호감도 게이지 시스템
   - 시선 고정 성공 시 초당 **+0.5** 게이지 상승
@@ -84,7 +84,7 @@
   - 노트 낙하: 상단에서 하단 판정선으로 떨어지는 노트를 타이밍에 맞춰 터치
   - 판정 범위: 노트가 판정선과 100px 이내에 있을 때 터치 시 성공
   <br>
-  <video src="https://github.com/user-attachments/assets/1dde129b-91af-44be-9ba1-fdb76ad571e4" width="320" controls autoplay loop muted></video>
+  <video src="https://github.com/user-attachments/assets/6d733eaa-2e97-4c5e-9e30-fc54d547eb05" width="320" controls autoplay loop muted></video>
   <br>
 - 점수 및 페널티 시스템
   - 노트 히트 시 **+10점**, 미스 시 **-20점** (최소 0점)
