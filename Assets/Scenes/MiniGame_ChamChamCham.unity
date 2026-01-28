@@ -427,9 +427,9 @@ RectTransform:
   m_Father: {fileID: 660676816}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00019836426, y: 0.0025024414}
+  m_SizeDelta: {x: 259.9437, y: -0.005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &12895083
 MonoBehaviour:
@@ -478,8 +478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
-  m_AspectMode: 3
-  m_AspectRatio: 0.58065456
+  m_AspectMode: 0
+  m_AspectRatio: 0.9999173
 --- !u!1 &400322132
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,6 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChamGameManager
   headDetector: {fileID: 400322133}
+  backgroundController: {fileID: 675442761}
   gameText: {fileID: 741536437}
   aiDirectionText: {fileID: 2142703887}
 --- !u!4 &400322135
@@ -782,9 +783,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundVideoController
   videoPlayer: {fileID: 675442762}
-  leftVideo: {fileID: 32900000, guid: cb85d7c3c464e214390639abda6d7ea9, type: 3}
-  centerVideo: {fileID: 32900000, guid: 7bcd981c485010543a2fcac93499a9a4, type: 3}
-  rightVideo: {fileID: 32900000, guid: 26f9d6b8832dabe42a6d255ed7449fcc, type: 3}
+  leftVideo: {fileID: 32900000, guid: b5aec9e4661fdbe4cb3a79f009c72475, type: 3}
+  centerVideo: {fileID: 32900000, guid: 1dbdb4579b9b5c7418401b9d77ca9227, type: 3}
+  rightVideo: {fileID: 32900000, guid: 97fe77f197643914891cd636cec2ae15, type: 3}
   currentDecision: 0
 --- !u!328 &675442762
 VideoPlayer:
@@ -803,10 +804,10 @@ VideoPlayer:
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: <noninit>
   m_RenderMode: 2
-  m_AspectRatio: 2
+  m_AspectRatio: 5
   m_DataSource: 0
   m_TimeUpdateMode: 2
-  m_PlaybackSpeed: 1
+  m_PlaybackSpeed: 0.7
   m_AudioOutputMode: 2
   m_TargetAudioSources:
   - {fileID: 0}
@@ -1040,7 +1041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -60,6 +60,15 @@ public class RhythmManager : MonoBehaviour
     {
         if (!isPlaying || isGameEnded) return;
 
+        // [추가] Enter 키로 스킵
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            Debug.Log("Enter 키로 리듬게임 스킵!");
+            currentScore = 300; // 목표 점수 달성
+            EndGame();
+            return;
+        }
+
         // 1. 노트 자동 생성
         timer += Time.deltaTime;
         if (timer >= spawnInterval)
