@@ -81,7 +81,7 @@
 
 - 개발 언어: C#
 - 게임 엔진: Unity
-- 그래픽: Figma, Vroid Studio
+- 그래픽: Figma, Vroid Studio, Blender, Aseprite
 
 <br>
 
