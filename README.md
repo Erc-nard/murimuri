@@ -68,7 +68,7 @@
 **AI 복원 코딩 퍼즐 게임** - 제한 시간 내에 손상된 코드를 수정하여 AI "Kana"를 복원하세요!
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/1a235867-9b35-417a-a893-2718669f084c" width="100%">
+  <img src="https://github.com/user-attachments/assets/1a235867-9b35-417a-a893-2718669f084c" width="30%">
 </p>
 
 ---
